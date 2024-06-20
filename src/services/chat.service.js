@@ -24,7 +24,15 @@ const accessChat = async (req) => {
                 { users: { $elemMatch: { $eq: userId } } },
                 { users: { $elemMatch: { $eq: new ObjectId(mongoUser?._id) } } }
             ]
-        }).populate('users')
+        })
+            .populate('users')
+            .populate({
+                path: 'latestMessage',
+                populate: {
+                    path: 'sender',
+                    model: 'User'
+                }
+            });
 
         // chat = await User.populate(chat, {
         //     path: 'latestMessage.sender',
@@ -34,9 +42,8 @@ const accessChat = async (req) => {
             return chat
         }
 
-        const otherUser = await User.findById(new ObjectId(userId))
         const chatData = {
-            chatName: otherUser?.name,
+            chatName: '',
             users: [mongoUser?._id, userId]
         }
 
@@ -57,6 +64,13 @@ const getAllChats = async (req) => {
         const chats = await Chat.find({ users: { $elemMatch: { $eq: mongoUser?._id } } })
             .populate('users')
             .populate('groupAdmin')
+            .populate({
+                path: 'latestMessage',
+                populate: {
+                    path: 'sender',
+                    model: 'User'
+                }
+            })
             .sort({ updatedAt: -1 })
 
         return chats

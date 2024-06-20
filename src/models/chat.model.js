@@ -22,7 +22,7 @@ const chatSchema = new Schema(
                 ref: 'User',
             },
         ],
-        latestMesage: {
+        latestMessage: {
             type: Schema.Types.ObjectId,
             ref: 'Message',
         },

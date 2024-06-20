@@ -24,6 +24,43 @@ const server = app.listen(config.port, () => {
     logger.info(`Listening to port ${config.port}`);
 });
 
+const io = require('socket.io')(server, {
+    pingTimeout: 60000,
+    cors: {
+        origin: 'http://localhost:5173'
+    }
+})
+
+io.on('connection', (socket) => {
+    console.log('connected to socket.io')
+
+    socket.on('setup', (user) => {
+        socket.join(user.uid)
+        socket.emit('connected')
+    })
+
+    socket.on('joinChat', (room) => {
+        socket.join(room)
+        console.log('user joined room ', room)
+    })
+
+    socket.on('newMessage', (newMessageRecieved) => {
+        let chat = newMessageRecieved?.chat
+
+        if (!chat?.users) return console.log('no users in chat')
+        // socket.in(chat?._id).emit('messageRecieved', newMessageRecieved)
+
+
+        chat?.users.forEach((user) => {
+            if (user?._id === newMessageRecieved?.sender?._id) return
+
+            console.log('new message sending', user?._id, newMessageRecieved?.sender?._id, user?._id === newMessageRecieved?.sender?._id)
+            socket.in(user?.uuid).emit('messageRecieved', newMessageRecieved)
+        })
+    })
+
+})
+
 const exitHandler = () => {
     if (server) {
         server.close(() => {

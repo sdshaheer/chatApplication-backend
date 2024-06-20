@@ -2,6 +2,7 @@ const express = require('express');
 const userAuthRoute = require('./userAuth.route')
 const userRoute = require('./user.route')
 const chatRoute = require('./chat.route')
+const messageRoute = require('./message.route')
 
 const firebaseAuthMiddleware = require('../middlewares/firebaseAuth')
 const mongoAuthMiddleware = require('../middlewares/mongoAuth')
@@ -22,6 +23,11 @@ const defaultRoutes = [
     {
         path: '/chat',
         route: chatRoute,
+        middlewares: [firebaseAuthMiddleware, mongoAuthMiddleware]
+    },
+    {
+        path: '/message',
+        route: messageRoute,
         middlewares: [firebaseAuthMiddleware, mongoAuthMiddleware]
     },
 
