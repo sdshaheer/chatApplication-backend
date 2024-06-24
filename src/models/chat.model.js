@@ -14,7 +14,7 @@ const chatSchema = new Schema(
         },
         groupPicture: {
             type: String,
-            default: 'https://wabetainfo.com/wp-content/uploads/2022/05/WA_GROUP_FB.png'
+            default: 'https://www.tenniscall.com/images/chat.jpg'
         },
         users: [
             {

@@ -32,11 +32,17 @@ const removeUserFromGroupChat = catchAsync(async (req, res) => {
     res.status(httpStatus.OK).send(result);
 });
 
+const updateGroupChat = catchAsync(async (req, res) => {
+    const result = await chatService.updateGroupChat(req);
+    res.status(httpStatus.OK).send(result);
+});
+
 module.exports = {
     accessChat,
     getAllChats,
     createGroupChat,
     renameGroupChat,
     addUserToGroupChat,
-    removeUserFromGroupChat
+    removeUserFromGroupChat,
+    updateGroupChat
 }

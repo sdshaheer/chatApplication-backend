@@ -194,11 +194,27 @@ const removeUserFromGroupChat = async (req) => {
     }
 };
 
+const updateGroupChat = async (req) => {
+    try {
+        const { data, chatId } = req.body
+
+        const response = await Chat.findByIdAndUpdate(chatId, { ...data }, { new: true })
+        console.log(response)
+        return response
+
+    } catch (error) {
+        const status = error?.statusCode || httpStatus.INTERNAL_SERVER_ERROR;
+        const details = error?.message || 'something went wrong';
+        throw new ApiError(status, details);
+    }
+};
+
 module.exports = {
     accessChat,
     getAllChats,
     createGroupChat,
     renameGroupChat,
     addUserToGroupChat,
-    removeUserFromGroupChat
+    removeUserFromGroupChat,
+    updateGroupChat
 }
