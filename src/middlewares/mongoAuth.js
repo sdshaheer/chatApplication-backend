@@ -9,16 +9,14 @@ async function mongoAuthMiddleware(req, res, next) {
         const user = req.user
         const mongouser = await getUserWithUuidFromMongo(user?.user_id)
         if (!mongouser) {
-            throw new ApiError(httpStatus.NOT_FOUND, `user with ${user?.user_id} not found in mongo`);
+            return res.status(httpStatus.NOT_FOUND).json({ error: `${user?.user_id} not found in users collection` });
         }
 
         req.mongoUser = mongouser
         next();
     } catch (error) {
-        const status = error?.statusCode || httpStatus.INTERNAL_SERVER_ERROR;
-        const details = error?.message || 'something went wrong';
-        logger.error(`error in mongoAuthMiddleware : ${error}`)
-        throw new ApiError(status, details);
+        logger.error('Error in mongoAuth :', error);
+        return res.status(httpStatus.NOT_FOUND).json({ error: `${user?.user_id} not found in users collection` });
     }
 }
 
