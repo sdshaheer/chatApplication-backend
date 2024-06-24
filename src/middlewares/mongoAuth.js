@@ -1,4 +1,4 @@
-const mongoose = require('mongoose');
+const ApiError = require('../utils/ApiError');
 const httpStatus = require('http-status');
 const logger = require('../config/logger');
 const { getUserWithUuidFromMongo } = require('../services/mongo.service')
