@@ -54,7 +54,7 @@ io.on('connection', (socket) => {
         chat?.users.forEach((user) => {
             if (user?._id === newMessageRecieved?.sender?._id) return
 
-            console.log('new message sending', user?._id, newMessageRecieved?.sender?._id, user?._id === newMessageRecieved?.sender?._id)
+            // console.log('new message sending', user?._id, newMessageRecieved?.sender?._id, user?._id === newMessageRecieved?.sender?._id)
             socket.in(user?.uuid).emit('messageRecieved', newMessageRecieved)
         })
     })
