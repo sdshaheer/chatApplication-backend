@@ -11,6 +11,7 @@ router.put('/renameGroupChat', chatController.renameGroupChat);
 router.put('/addUserToGroupChat', chatController.addUserToGroupChat);
 router.put('/removeUserFromGroupChat', chatController.removeUserFromGroupChat);
 router.put('/updateGroupChat', chatController.updateGroupChat);
+router.post('/exitGroup', chatController.exitGroup);
 
 
 

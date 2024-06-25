@@ -209,6 +209,31 @@ const updateGroupChat = async (req) => {
     }
 };
 
+
+const exitGroup = async (req) => {
+    try {
+        const { chatId } = req?.body
+        const { mongoUser } = req
+
+        const updatedChat = await Chat.findByIdAndUpdate(
+            new ObjectId(chatId),
+            { $pull: { users: mongoUser?._id } },
+            { new: true }
+        ).populate('users')
+
+        if (!updatedChat) {
+            throw new ApiError(httpStatus.NOT_FOUND, `chat with ${chatId} not found`)
+        }
+
+        return updatedChat
+
+    } catch (error) {
+        const status = error?.statusCode || httpStatus.INTERNAL_SERVER_ERROR;
+        const details = error?.message || 'something went wrong';
+        throw new ApiError(status, details);
+    }
+};
+
 module.exports = {
     accessChat,
     getAllChats,
@@ -216,5 +241,6 @@ module.exports = {
     renameGroupChat,
     addUserToGroupChat,
     removeUserFromGroupChat,
-    updateGroupChat
+    updateGroupChat,
+    exitGroup
 }
